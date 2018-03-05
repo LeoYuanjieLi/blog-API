@@ -57,8 +57,10 @@ describe('Blog Test', function(){
   	it('should add an item on POST', function(){
   		const newItem = {title:'test A', content: "this is a test post", 
   		author: "Leo_Tester", publishDate: "03-03-2018"};
-  		return chai.reuqest(app)
-  		.get('/blog-posts')
+      // const expectedKeys = ['id', 'publishDate'].concat(Object.keys(newItem));
+  		return chai.request(app)
+  		.post('/blog-posts')
+      .send(newItem)
   		.then(function(res){
   			expect(res).to.have.status(201);
   			expect(res).to.be.json;
@@ -67,7 +69,9 @@ describe('Blog Test', function(){
   			expect(res.body).to.include.keys(expectedKeys);
   			expect(res.body.id).to.not.equal(null);
   			// should be deep equal
-  			expect(res.body).to.deep.equal(Object.assign(newItem, {id: res.body.id}));
+        expect(res.body.title).to.equal(newItem.title);
+        expect(res.body.content).to.equal(newItem.content);
+        expect(res.body.author).to.equal(newItem.author)
   		});
   	});
 
